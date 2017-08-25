@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>New York Times Search</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+
+<body>
+    <div style="margin-left: 60px; margin-right: 60px; background-color:navy; color: white;" class="jumbotron">
+        <h1 style="text-align: center;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> New York Times Search</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-6">
+            	
+                <form style="border: 1px solid black; padding-left: 10px; padding-right: 10px; border-top: 35px solid black; border-radius: 3px;">
+                	<p>Search Parameters</p>
+                    <div class="form-group">
+                        <label for="SearchTerm">Search Term</label>
+                        <input type="text" class="form-control" id="searchTerm" name="SearchTerm">
+                        <label for="numRecords">Number of Records to retrieve</label>
+                        <input type="text" class="form-control" id="numRecords" name="numRecords">
+                        <label for="startYear">Start Year (Optional):</label>
+                        <input type="text" class="form-control" id="startYear" name="startYear">
+                        <label for="endYear">End Year (Optional):</label>
+                        <input type="text" class="form-control" id="endYear" name="endYear"><br>
+                        <button type="submit" class="btn btn-primary" id="search"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                        <button class="btn btn-danger" id="clear">Clear Results</button>
+                    </div>
+                </form>
+            <div class="col-md-2">
+            </div>
+        <div class="row">
+        	<div class="col-md-2">
+        	</div>
+        	<div class="col-md-6" id="article-view">
+        		
+        	</div>
+        	<div class="col-md-2">
+        	</div>
+        </div>    
+            </div>
+
+
+
+            <!-- Javascript -->
+            <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script src="https://use.fontawesome.com/e72140a2dd.js"></script>
+            <script type="text/Javascript">
+
+            $('input[type=submit]').on('click', function() {
+                return false;
+            });
+
+            function displayResults() {
+                
+
+                var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + article + "&apikey=17809b44a7f74e72ac5303e8aceb3b1b&?begin_date=" + startYear + "0101&?end_date=" + endYear + "0101";
+
+                $.ajax({
+                    url: queryURL,
+                    method: 'GET' 
+                }).done(function(retrieve){
+                    $('#articles').html(retrieve.response.headline.main);
+                    for (var i=0; i < retrieve.response; i++) {
+                        var articleDiv = $('<div>');
+                        var headline = $('<h1>').text(retrieve.response[i].docs.main);
+                        var beginDate = $("<p>").text("Start Year: " + retreive[i].response.begin_date);
+                        var endDate = $("<p>").text("End Year: " + retrieve[i].response.end_Date);
+                        articleDiv.append(headline, response, beginDate);
+
+                    }
+                })
+            }
+
+            $('#search').on('click', function(event){
+                event.preventDefault()
+                var article = $('#articles').val();
+                displayResults();
+            })
+
+            // $("#search").on("click", function() {
+
+            //     var limit = $(this).val('#numRecords');
+            //     var startYear = $(this).attr("#startYear");
+            //     var endYear = $(this).attr("#endYear");
+            //     var queryURL = "http://developer.nytimes.com/search?q=" + article + "&apikey='35d66ab4fef94895b81b426aebd9de6c'&begin_date=" + startYear + "&end_date=" + endYear;
+
+            //     $.ajax ({
+            //         url: queryURL,
+            //         method: "GET"
+            //     }).done(function(retrieve) {
+            //         var results = retrieve.response;
+            //         for (var i = 0; i < results.length; i++) {
+
+
+            //             // headline, author, section, date, (maybe snippet)
+            //             var beginDate = $("<p>").text("Start Year: " + results[i].begin_date);
+            //             var endDate = $("<p>").text("End Year: " + results[i].end_Date);
+
+            //             $('#articles').text(results[i].response.headline.main);
+            //         }
+            //     })
+            // })
+            </script>
+</body>
+
+</html>
